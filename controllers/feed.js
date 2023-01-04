@@ -5,33 +5,50 @@ const { validationResult } = require("express-validator");
 const Post = require("../models/post");
 const User = require("../models/user");
 
-exports.getPosts = (req, res, next) => {
+exports.getPosts = async (req, res, next) => {
   const currentPage = req.query.page || 1;
   const perPage = 2;
-  let totalItems;
+  // let totalItems;
 
-  Post.find()
-    .countDocuments()
-    .then((count) => {
-      totalItems = count;
-      return Post.find()
-        .populate("creator", "name")
-        .skip((currentPage - 1) * perPage)
-        .limit(perPage);
-    })
-    .then((posts) => {
-      res.status(200).json({
-        message: "Fetched posts successfully.",
-        posts: posts,
-        totalItems: totalItems,
-      });
-    })
-    .catch((err) => {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
-      next(err);
-    });
+  try {
+    const totalItems = await Post.find().countDocuments();
+    const posts = await Post.find()
+      .populate("creator", "name")
+      .skip((currentPage - 1) * perPage)
+      .limit(perPage);
+
+    res
+      .status(200)
+      .json({ message: "Fetched posts successfully.", posts, totalItems });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+
+  // Post.find()
+  //   .countDocuments()
+  //   .then((count) => {
+  //     totalItems = count;
+  //     return Post.find()
+  //       .populate("creator", "name")
+  //       .skip((currentPage - 1) * perPage)
+  //       .limit(perPage);
+  //   })
+  //   .then((posts) => {
+  //     res.status(200).json({
+  //       message: "Fetched posts successfully.",
+  //       posts: posts,
+  //       totalItems: totalItems,
+  //     });
+  //   })
+  //   .catch((err) => {
+  //     if (!err.statusCode) {
+  //       err.statusCode = 500;
+  //     }
+  //     next(err);
+  //   });
 };
 
 exports.createPost = (req, res, next) => {
