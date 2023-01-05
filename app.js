@@ -67,7 +67,13 @@ mongoose
     useUnifiedTopology: true,
   })
   .then((result) => {
-    app.listen(8080);
+    const server = app.listen(8080);
+    const io = require("socket.io")(server, {
+      cors: {
+        origin: "*",
+        methods: ["GET", "POST"],
+      },
+    });
   })
   .catch((err) => {
     console.log(err);
