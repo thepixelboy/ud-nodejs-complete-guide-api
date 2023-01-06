@@ -1,8 +1,1 @@
-module.exports = {
-  hello() {
-    return {
-      text: "Hello World!",
-      views: 123,
-    };
-  },
-};
+module.exports = {};
