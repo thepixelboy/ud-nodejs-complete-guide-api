@@ -50,6 +50,7 @@ app.use(
   graphqlHTTP({
     schema: require("./graphql/schema"),
     rootValue: require("./graphql/resolvers"),
+    graphiql: true,
   })
 );
 
