@@ -46,7 +46,7 @@ module.exports = buildSchema(`
   }
   
   schema {
-    query: RootMutation
+    query: RootQuery
     mutation: RootMutation
   }
 `);
