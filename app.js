@@ -1,11 +1,13 @@
 const path = require("path");
-const fs = require("fs");
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const multer = require("multer");
 const { graphqlHTTP } = require("express-graphql");
+
 const auth = require("./middleware/auth");
+const { clearImage } = require("./helpers/file");
 
 require("dotenv").config();
 
@@ -107,8 +109,3 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
-
-const clearImage = (filePath) => {
-  filePath = path.join(__dirname, "..", filePath);
-  fs.unlink(filePath, (err) => console.log(err));
-};
